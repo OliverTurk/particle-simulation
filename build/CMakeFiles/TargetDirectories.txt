@@ -1,0 +1,3 @@
+/Users/oliverturk/Programming/particle_simulation/build/CMakeFiles/ParticleSimulation.dir
+/Users/oliverturk/Programming/particle_simulation/build/CMakeFiles/edit_cache.dir
+/Users/oliverturk/Programming/particle_simulation/build/CMakeFiles/rebuild_cache.dir
