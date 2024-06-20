@@ -12,12 +12,15 @@ class Particle
     void accelerate(sf::Vector2f acceleration);
 
   private:
+    void checkBoundaryCollision();
+
     float radius;
     float movementFactor;
     sf::CircleShape shape;
     sf::Vector2f positionCurrent;
     sf::Vector2f positionOld;
     sf::Vector2f acceleration;
+    sf::Vector2f velocity;
 };
 
 #endif
