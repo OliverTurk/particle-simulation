@@ -64,6 +64,32 @@ void Particle::draw(sf::RenderWindow& window)
 
 void Particle::accelerate(sf::Vector2f acc)
 {
-   acceleration += acc; 
-};
+    acceleration += acc; 
+}
 
+void Particle::resolveCollision(Particle& other, float distance)
+{   
+    sf::Vector2f delta = positionCurrent - other.getPosition();
+    float overlap = 0.5f * (distance - radius - other.getRadius());
+
+    positionCurrent -= delta * (overlap / distance);
+    
+    sf::Vector2f tempPosition = other.getPosition();
+    tempPosition += delta * (overlap / distance);
+    other.updatePosition(tempPosition);
+}
+
+sf::Vector2f Particle::getPosition()
+{
+    return positionCurrent;
+}
+
+void Particle::updatePosition(sf::Vector2f newPosition)
+{
+    positionCurrent = newPosition;
+}
+
+float Particle::getRadius()
+{
+  return radius;
+}

@@ -2,11 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <cmath>
+#include <SFML/Graphics.hpp>
 #include "particle.h"
 
 void updatePositions(std::vector<Particle>& particles, float timeStep);
 void drawParticles(sf::RenderWindow& window, std::vector<Particle>& particles);
-void checkParticleCollisions(std::vector<Particle> particles);
+void checkParticleCollisions(std::vector<Particle>& particles);
 
 int main()
 {
@@ -29,20 +31,14 @@ int main()
     sf::Clock spawnClock;
 
     const float timeStep = 1.0f / 60.0f;
-    const float spawnInterval = 5.0f;
+    const float spawnInterval = 0.1f;
     float accumulator = 0.0f;
-
-    for (int i=0; i < 2; i++) 
-    {
-        Particle particle(0.f, 0.f, 30.f);
-        particles.push_back(particle);
-    }
 
     while (window.isOpen())
     {   
         if (spawnClock.getElapsedTime().asSeconds() >= spawnInterval)
         {
-            Particle particle(0.f, 0.f, 30.f);
+            Particle particle(0.f, 0.f, 2.f);
             particles.push_back(particle);
             spawnClock.restart();
         }
@@ -80,11 +76,17 @@ int main()
 
 void updatePositions(std::vector<Particle>& particles, float timeStep)
 {
-    sf::Vector2f gravity = {0.0f, 100.0f};
+    sf::Vector2f gravity = {0.0f, 00.0f};
     
     for (auto& p : particles)
     {
         p.accelerate(gravity);
+    }
+
+    checkParticleCollisions(particles);
+
+    for (auto& p : particles)
+    {
         p.update(timeStep);
     }
 }
@@ -97,11 +99,25 @@ void drawParticles(sf::RenderWindow& window, std::vector<Particle>& particles)
     }
 } 
 
-void checkParticleCollisions(std::vector<Particle> particles)
+void checkParticleCollisions(std::vector<Particle>& particles)
 {
-    for (auto& p : particles)
+    for (int i=0; i < particles.size(); i++)
     {
-        
+        for (int j=0; j < particles.size(); j++)
+        {
+            if (i != j)
+            {
+                sf::Vector2f position1 = particles[i].getPosition();
+                sf::Vector2f position2 = particles[j].getPosition();
+
+                float distance = std::sqrt(std::pow(position1.x - position2.x, 2.0) + std::pow(position1.y - position2.y, 2.0));
+
+                if (distance <= particles[i].getRadius() + particles[j].getRadius())
+                {   
+                   particles[i].resolveCollision(particles[j], distance);
+                }
+            }
+        }
     }
 }
 

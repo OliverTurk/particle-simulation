@@ -10,6 +10,10 @@ class Particle
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
     void accelerate(sf::Vector2f acceleration);
+    void resolveCollision(Particle& other, float distance);
+    sf::Vector2f getPosition();
+    float getRadius();
+    void updatePosition(sf::Vector2f newPosition);
 
   private:
     void checkBoundaryCollision();
